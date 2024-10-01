@@ -10,7 +10,7 @@ pipeline {
         stage('Clone Repository') {
             steps {
                 // Clone the code from Git
-                git branch: 'main', url: ''
+                git branch: 'main', url: 'https://github.com/j2501/DeltaForce.git'
             }
         }
 
