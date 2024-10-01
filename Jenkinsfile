@@ -30,7 +30,7 @@ pipeline {
                 withSonarQubeEnv('SonarQubeServer') {  // Replace with your SonarQube server name
                     sh '''
                         ${SONARQUBE_SCANNER_HOME}/bin/sonar-scanner \
-                        -Dsonar.projectKey=your-project-key \
+                        -Dsonar.projectKey=DeltaForce \
                         -Dsonar.sources=. \
                         -Dsonar.host.url=http://localhost:9000
                     '''
