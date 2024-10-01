@@ -5,6 +5,10 @@ pipeline {
         // Use the correct JDK version configured in Jenkins
         jdk 'jdk-17.0.12'  // Adjust to match your configuration
     }
+
+    enviornment {
+            SONARQUBE_SCANNER_HOME = tool 'SonarQubeScanner'
+    }
     
     stages {
         stage('Clone Repository') {
@@ -20,6 +24,20 @@ pipeline {
                 sh 'javac Assign.java'
             }
         }
+
+        stage('SAST with SonarQube') {
+            steps {
+                withSonarQubeEnv('SonarQubeServer') {  // Replace with your SonarQube server name
+                    sh '''
+                        ${SONARQUBE_SCANNER_HOME}/bin/sonar-scanner \
+                        -Dsonar.projectKey=your-project-key \
+                        -Dsonar.sources=. \
+                        -Dsonar.host.url=http://localhost:9000
+                    '''
+                }
+            }
+        }
+    }
 
           stage('Run Application') {
             steps {
