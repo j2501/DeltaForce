@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediCure Pharma - Login</title>
+    <style>
+        /* Previous styles remain the same */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-container {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #2563eb, #1e40af);
+        }
+
+        .logo-section {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .logo-section h1 {
+            color: #1e40af;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .logo-section p {
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #334155;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        /* New Alert Styles */
+        .alert {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: none;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .alert-danger {
+            background-color: #fee2e2;
+            border: 1px solid #fecaca;
+            color: #dc2626;
+        }
+
+        .alert-warning {
+            background-color: #fff7ed;
+            border: 1px solid #fed7aa;
+            color: #ea580c;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* Existing styles continue */
+        .remember-forgot {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+
+        .remember-me input[type="checkbox"] {
+            width: 1rem;
+            height: 1rem;
+            accent-color: #2563eb;
+        }
+
+        .forgot-password {
+            color: #2563eb;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .forgot-password:hover {
+            color: #1e40af;
+        }
+
+        .login-button {
+            width: 100%;
+            padding: 0.75rem;
+            background: linear-gradient(90deg, #2563eb, #1e40af);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .login-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+        }
+
+        .signup-link {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+
+        .signup-link a {
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: 500;
+            margin-left: 0.25rem;
+        }
+
+        .signup-link a:hover {
+            color: #1e40af;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 2rem;
+            color: #94a3b8;
+            font-size: 0.8rem;
+        }
+
+        @media (max-width: 480px) {
+            .login-container {
+                margin: 1rem;
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <!-- Alert Containers -->
+        <div id="sqlInjectionAlert" class="alert alert-danger">
+            Potential SQL injection detected! Please enter valid credentials.
+        </div>
+        <div id="securityAlert" class="alert alert-warning">
+            Suspicious activity detected. Please try again.
+        </div>
+
+        <div class="logo-section">
+            <h1>MediCure Pharma</h1>
+            <p>Welcome back! Please login to your account</p>
+        </div>
+
+        <form id="loginForm" onsubmit="return validateForm(event)">
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" required placeholder="Enter your email" onkeyup="checkInput(this)">
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" required placeholder="Enter your password" onkeyup="checkInput(this)">
+            </div>
+
+            <div class="remember-forgot">
+                <label class="remember-me">
+                    <input type="checkbox">
+                    <span>Remember me</span>
+                </label>
+                <a href="#" class="forgot-password">Forgot password?</a>
+            </div>
+
+            <button type="submit" class="login-button">Sign In</button>
+        </form>
+
+        <div class="signup-link">
+            Don't have an account?<a href="#">Sign up</a>
+        </div>
+
+        <div class="footer">
+            © 2025 MediCure Pharma. All rights reserved.
+        </div>
+    </div>
+
+    <script>
+        // SQL Injection detection patterns
+        const sqlInjectionPatterns = [
+            /'.*'/i,                    // Single quotes
+            /".*"/i,                    // Double quotes
+            /\b(SELECT|INSERT|UPDATE|DELETE|DROP|UNION|ALTER)\b/i,  // SQL Keywords
+            /--;.*/i,                   // SQL comments
+            /\/\*.+\*\//i,             // Multi-line comments
+            /\bOR\b.*\b(TRUE|1=1)\b/i,  // OR TRUE/1=1 patterns
+            /\bAND\b.*\b(TRUE|1=1)\b/i  // AND TRUE/1=1 patterns
+        ];
+
+        // Function to check input for SQL injection attempts
+        function checkInput(input) {
+            const value = input.value;
+            const sqlInjectionAlert = document.getElementById('sqlInjectionAlert');
+            const securityAlert = document.getElementById('securityAlert');
+            
+            // Reset alerts
+            sqlInjectionAlert.style.display = 'none';
+            securityAlert.style.display = 'none';
+
+            // Check for SQL injection patterns
+            for (let pattern of sqlInjectionPatterns) {
+                if (pattern.test(value)) {
+                    sqlInjectionAlert.style.display = 'block';
+                    input.style.borderColor = '#dc2626';
+                    return;
+                }
+            }
+
+            // Check for other suspicious patterns
+            if (value.length > 50 || /[<>]/.test(value)) {
+                securityAlert.style.display = 'block';
+                input.style.borderColor = '#ea580c';
+                return;
+            }
+
+            // Reset input style if no issues found
+            input.style.borderColor = '#e2e8f0';
+        }
+
+        // Form validation
+        function validateForm(event) {
+            event.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            // Check for any visible alerts
+            const hasAlerts = document.querySelector('.alert[style*="block"]');
+            if (hasAlerts) {
+                return false;
+            }
+
+            // Basic email validation
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailPattern.test(email)) {
+                document.getElementById('securityAlert').style.display = 'block';
+                return false;
+            }
+
+            // If all checks pass, you would normally submit the form here
+            console.log('Form submitted successfully');
+            return false; // Preventing actual submission for demo
+        }
+    </script>
+</body>
+</html>
